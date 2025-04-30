@@ -2,12 +2,12 @@ name: Build APK
 
 on:
   push:
-    branches:
-      - main  # 如果你的主分支叫 master 就改成 master
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,11 +22,10 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
-        
-      - name: Show APK outputs (debugging)
-        run: |
-          find app/build/ -type f
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Debug: List output files
+        run: find app/build/ -type f
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
