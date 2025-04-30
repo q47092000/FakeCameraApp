@@ -24,9 +24,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew assembleDebug --stacktrace
 
-      - name: Debug: List output files
-        run: find app/build/ -type f
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
