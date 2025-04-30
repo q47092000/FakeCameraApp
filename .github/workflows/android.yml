@@ -8,26 +8,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 🔑 給 release 權限
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: 17
-        distribution: temurin
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
 
-    - name: Grant permission to gradlew
-      run: chmod +x ./gradlew
+      - name: Grant permission to gradlew
+        run: chmod +x ./gradlew
 
-    - name: Build APK
-      run: ./gradlew assembleDebug --stacktrace
+      - name: Build APK
+        run: ./gradlew assembleDebug --stacktrace
 
-    - name: Upload Release APK
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v1.${{ github.run_number }}
-        name: "FakeCameraApp Release ${{ github.run_number }}"
-        files: app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload Release APK
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.${{ github.run_number }}
+          name: "FakeCameraApp Release ${{ github.run_number }}"
+          files: app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
